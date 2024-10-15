@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.28)
-project(rsdk-example VERSION 0.0.1
-                 DESCRIPTION "rangers-sdk example"
+project(sm64-frontiers VERSION 0.0.1
+                 DESCRIPTION "sm64-frontiers"
                  LANGUAGES CXX)
 
 set(PROJECT_AUTHOR "angryzor")
-set(PROJECT_LONG_DESCRIPTION "rangers-sdk example")
+set(PROJECT_LONG_DESCRIPTION "sm64-frontiers")
 set(PROJECT_COPYRIGHT "Copyright (c) 2024 angryzor - Licensed under GPL3")
 set(PROJECT_AUTHOR_URL "https://github.com/angryzor")
 set(PROJECT_UPDATE_SERVER "https://raw.githubusercontent.com/angryzor/hmm-update-server/main/sonic-frontiers/rsdk-example/")
@@ -17,6 +17,9 @@ set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<$<CONFIG:Debug,RelWithDebInfo>:EditAn
 set(GAME_FOLDER "C:\\Program Files (x86)\\Steam\\steamapps\\common\\SonicFrontiers" CACHE STRING "The location of your game folder.")
 cmake_path(SET GAME_FOLDER_NORMALIZED NORMALIZE ${GAME_FOLDER})
 cmake_path(APPEND GAME_FOLDER_NORMALIZED "SonicFrontiers.exe" OUTPUT_VARIABLE SONIC_FRONTIERS_GAME_EXECUTABLE)
+
+set(SM64_FOLDER "C:\\Users\\Ruben Tytgat\\Documents\\libsm64" CACHE STRING "The location libsm64.")
+cmake_path(SET SM64_FOLDER_NORMALIZED NORMALIZE ${SM64_FOLDER})
 
 if(DEFINED ENV{SONIC_FRONTIERS_SDK})
     message("SONIC_FRONTIERS_SDK environment variable found. Using this version instead of the local submodule.")
@@ -36,6 +39,9 @@ add_subdirectory(${RANGERS_SDK_PATH} rangers-sdk EXCLUDE_FROM_ALL)
 add_library(mod SHARED)
 target_compile_features(mod PRIVATE cxx_std_20)
 target_compile_options(mod PRIVATE /permissive-)
+target_include_directories(mod PRIVATE "${SM64_FOLDER_NORMALIZED}/include")
+target_link_directories(mod PRIVATE "${SM64_FOLDER_NORMALIZED}/lib")
+target_link_libraries(mod PRIVATE "C:\\Users\\Ruben Tytgat\\Documents\\libsm64\\lib\\sm64.lib")
 target_compile_definitions(mod
     PRIVATE
         PROJECT_BINARY_FILENAME=$<TARGET_FILE_NAME:mod>
